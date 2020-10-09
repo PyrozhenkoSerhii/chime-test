@@ -14,14 +14,13 @@ const mediaPlacementRegion = "us-east-1";
 
 export const chimeRouter = Router();
 
+const requestId = uuidv4();
+
 
 chimeRouter.post("/chime", async (req: Request, res: Response) => {
-  console.log(req.body);
   const {userId} = req.body
 
   try {
-    const requestId = uuidv4();
-
     const meeting = await chime.createMeeting({
       ClientRequestToken: requestId,
       MediaRegion: mediaPlacementRegion,
@@ -34,11 +33,11 @@ chimeRouter.post("/chime", async (req: Request, res: Response) => {
       ExternalUserId: userId,
     }).promise();
 
-    const attendeeId = attendee.Attendee.AttendeeId;
+    console.log(attendee);
 
     return res.status(200).send({
-      meetingId,
-      attendeeId,
+      meeting: meeting.Meeting,
+      attendee: attendee.Attendee,
     });
   } catch(err) {
     console.log('Error while POST /chime request', err)

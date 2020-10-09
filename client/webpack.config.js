@@ -1,16 +1,13 @@
-import { Configuration as WebpackConfiguration, ProgressPlugin } from "webpack";
-import * as Dotenv from "dotenv-webpack";
-import { CleanWebpackPlugin } from "clean-webpack-plugin";
-import * as HtmlWebpackPlugin from "html-webpack-plugin";
+/* eslint-disable @typescript-eslint/no-var-requires */
+const Dotenv = require("dotenv-webpack");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-const config: WebpackConfiguration = {
+module.exports = {
   target: "web",
   resolve: {
-    extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
-  },
-  entry: "./index.tsx",
-  output: {
-    publicPath: "/",
+    extensions: [".tsx", ".ts", ".js", ".jsx", ".json"],
   },
   module: {
     rules: [
@@ -34,16 +31,24 @@ const config: WebpackConfiguration = {
       },
     ],
   },
+  entry: "./index.tsx",
+  devServer: {
+    historyApiFallback: true,
+    open: true,
+    hot: true,
+    host: "localhost",
+    port: 80,
+  },
+  devtool: "source-map",
   plugins: [
     new Dotenv({
       path: "../server/.env",
     }),
-    new ProgressPlugin(),
+    new webpack.ProgressPlugin(),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: "./index.html",
     }),
   ],
-};
 
-export default config;
+};

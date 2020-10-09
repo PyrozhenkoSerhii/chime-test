@@ -9,11 +9,13 @@
     "sourceMap": true,
     "experimentalDecorators": true,
     "noImplicitAny": false,
-    "lib": ["es2017", "dom"],
-    "types": ["node", "dom-mediacapture-record"]
+    "lib": [
+      "es2017",
+      "dom"
+    ]
   },
   "include": [
     "./**/*.ts",
-    "./**/*.tsx",
+    "./**/*.tsx"
   ],
 }

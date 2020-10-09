@@ -1,7 +1,8 @@
 import * as React from "react";
 import { render } from "react-dom";
 import { BrowserRouter } from "react-router-dom";
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, ThemeProvider } from "styled-components";
+import { MeetingProvider, lightTheme } from "amazon-chime-sdk-component-library-react";
 
 import { App } from "./App";
 
@@ -18,9 +19,13 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 render(
-  <BrowserRouter>
-    <GlobalStyle />
-    <App />
-  </BrowserRouter>,
+  <ThemeProvider theme={lightTheme}>
+    <MeetingProvider>
+      <BrowserRouter>
+        <GlobalStyle />
+        <App />
+      </BrowserRouter>
+    </MeetingProvider>
+  </ThemeProvider>,
   document.getElementById("app"),
 );
