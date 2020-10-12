@@ -1,6 +1,4 @@
 import { Request, Response, Router } from "express";
-import {v4 as uuidv4} from "uuid";
-
 import AWS from "aws-sdk";
 
 AWS.config.credentials = new AWS.Credentials({
@@ -14,26 +12,25 @@ const mediaPlacementRegion = "us-east-1";
 
 export const chimeRouter = Router();
 
-const requestId = uuidv4();
-
-
+/**
+ * TODO: Check if I should recreate meeting for each attendee (works now)
+ * If not - save corresponding "meetingId" and "actualMeetingId" somewhere
+ */
 chimeRouter.post("/chime", async (req: Request, res: Response) => {
-  const {userId} = req.body
+  const {meetingId, userId} = req.body
 
   try {
     const meeting = await chime.createMeeting({
-      ClientRequestToken: requestId,
+      ClientRequestToken: meetingId,
       MediaRegion: mediaPlacementRegion,
     }).promise();
-
-    const meetingId = meeting.Meeting.MeetingId;
+    
+    const actualMeetingId = meeting.Meeting.MeetingId;
 
     const attendee = await chime.createAttendee({
-      MeetingId: meetingId,
+      MeetingId: actualMeetingId,
       ExternalUserId: userId,
     }).promise();
-
-    console.log(attendee);
 
     return res.status(200).send({
       meeting: meeting.Meeting,
